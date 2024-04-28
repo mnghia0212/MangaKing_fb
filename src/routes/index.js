@@ -11,7 +11,9 @@ import SignUpPage from "../pages/SignUpPage/SignUpPage";
 import TypeProductPage from "../pages/TypeProductPage/TypeProductPage";
 import PaymentPage from "../pages/PaymentPage/PaymentPage";
 import OrderSucess from "../pages/OrderSuccess/OrderSuccess"
-import DetailsOrderPage from "../pages/DetailsOrderPage/DetailsOrderPage"
+import DetailsInvoicePage from "../pages/DetailsInvoicePage/DetailsInvoicePage";
+import FilterPage from "../pages/FilterPage/FilterPage";
+import DetailsOrderPage from "../pages/DetailsOrderPage/DetailsOrderPage";
 
 const routes = [
     {
@@ -34,6 +36,12 @@ const routes = [
     },
 
     {
+        path: '/filter',
+        page: FilterPage,
+        IsShowHeader: true
+    },
+
+    {
         path: '/sign-in',
         page: SignInPage,
         IsShowHeader: false,
@@ -46,10 +54,17 @@ const routes = [
     },
 
     {
+        path: '/details-invoice/:id',
+        page: DetailsInvoicePage,
+        isShowHeader: true
+    },
+
+    {
         path: '/details-order/:id',
         page: DetailsOrderPage,
         isShowHeader: true
     },
+
 
     {
         path: '/product-detail/:id',
@@ -57,11 +72,14 @@ const routes = [
         IsShowHeader: true
 
     },
+
     {
         path: '/payment',
         page: PaymentPage,
-        isShowHeader: true
+        isShowHeader: false
     },
+
+
     {
         path: '/orderSuccess',
         page: OrderSucess,

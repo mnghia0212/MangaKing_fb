@@ -1,5 +1,5 @@
 import { Button, Form, Space } from "antd";
-import React from "react";
+import React  from "react";
 import { WrapperHeader, WrapperUploadFile } from "./style";
 import TableComponent from "../TableComponent/TableComponent";
 import InputComponent from "../InputComponent/InputComponent";
@@ -7,7 +7,7 @@ import DrawerComponent from "../DrawerComponent/DrawerComponent";
 import Loading from "../LoadingComponent/Loading";
 import ModalComponent from "../ModalComponent/ModalComponent";
 import { convertPrice, getBase64 } from "../../utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as message from "../Message/Message";
 
 import * as OrderService from "../../services/OrderService";
@@ -17,8 +17,13 @@ import { useSelector } from "react-redux";
 import { orderContant } from "../../contant";
 import PieChartComponent from "./PieChart";
 import { useQuery } from "react-query";
+import { Excel } from "antd-table-saveas-excel";
+
 
 const OrderAdmin = () => {
+
+    // useState tính tổng tiền
+  const [totalPrice, setTotalPrice] = useState(0);
   const user = useSelector((state) => state?.user);
 
   const getAllOrder = async () => {
@@ -28,6 +33,33 @@ const OrderAdmin = () => {
 
   const queryOrder = useQuery({ queryKey: ["orders"], queryFn: getAllOrder });
   const { isLoading: isLoadingOrders, data: orders } = queryOrder;
+
+    // Tính tổng tiền khi có dữ liệu
+    useEffect(() => {
+        if (orders?.data) {
+            const total = orders.data.reduce((acc, order) => acc + order.totalPrice, 0);
+            setTotalPrice(total);
+        }
+        }, [orders?.data]);
+
+  const exportCustomExcel = () => {
+    const excel = new Excel();
+    const simplifiedData = dataTable.map(item => ({
+      ...item,
+      product: item.product.replace(/\n/g, ", "), // Replace new lines with commas for better visibility in Excel
+      amount: item.amount.replace(/\n/g, ", "),
+    }));
+    excel
+      .addSheet("Orders")
+      .addColumns(columns.filter(col => col.dataIndex !== 'action').map(col => ({
+        title: col.title,
+        dataIndex: col.dataIndex
+      })))
+      .addDataSource(simplifiedData, {
+        str2Percent: true
+      })
+      .saveAs("Orders.xlsx");
+  };
 
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -142,26 +174,33 @@ const OrderAdmin = () => {
     },
 
     {
-      title: "Amount",
-      dataIndex: "amount",
-      sorter: (a, b) => a.amount.length - b.amount.length,
-      ...getColumnSearchProps("amount"),
-      render: (text) => (
-        <div>
-          {text.split("\n").map((line, index) => (
-            <span key={index}>
-              {line}
-              {index !== text.split("\n").length - 1 && <br />}
-            </span>
-          ))}
-        </div>
-      ),
+        title: 'Amount',
+        dataIndex: 'amount',
+        key: 'amount',
+        sorter: (a, b) => a.amount - b.amount,  // Sửa đổi phép so sánh nếu quantity là số
+        render: (text) => {
+          // Đảm bảo rằng text là một chuỗi trước khi thực hiện split
+          const textString = String(text);
+          if (textString.indexOf("\n") === -1) {
+            return <div>{textString}</div>;
+          }
+          return (
+            <div>
+              {textString.split("\n").map((line, index) => (
+                <span key={index}>
+                  {line}
+                  {index !== textString.split("\n").length - 1 && <br />}
+                </span>
+              ))}
+            </div>
+          );
+        },
     },
+    
     {
       title: "Phone",
       dataIndex: "phone",
-      sorter: (a, b) => a.phone.length - b.phone.length,
-      ...getColumnSearchProps("phone"),
+    
     },
     {
       title: "Address",
@@ -178,12 +217,12 @@ const OrderAdmin = () => {
     {
       title: "Payment method",
       dataIndex: "paymentMethod",
-      sorter: (a, b) => a.paymentMethod.length - b.paymentMethod.length,
-      ...getColumnSearchProps("paymentMethod"),
+     
     },
     {
       title: "Total price",
       dataIndex: "totalPrice",
+      //render: (value) => convertPrice(value),
       sorter: (a, b) => a.totalPrice.length - b.totalPrice.length,
       ...getColumnSearchProps("totalPrice"),
     },
@@ -210,18 +249,31 @@ const OrderAdmin = () => {
     });
 
   return (
-    <div>
-      <WrapperHeader>Order Management</WrapperHeader>
-      <div style={{ height: 200, width: 200 }}>
-        <PieChartComponent data={orders?.data} />
-      </div>
+        <div>
+
+            <WrapperHeader>Order Management</WrapperHeader>
+
+                <div style={{display:'flex', flexDirection:'row', justifyContent:"space-between", alignItems:'center', padding:"0px 20px" }} >
+                        <div style={{ height: 200, width: 200 }}>
+                                <PieChartComponent data={orders?.data} />
+                        </div>
+
+                        <div style={{background:'#FFE990 ', padding:"20px", borderRadius:'10px'}}>
+                            <h2 style={{margin: "0px", fontSize:"22px",fontFamily:'Signika Negative'}}>TOTAL ORDER AMOUNT: {convertPrice(totalPrice)}</h2>
+                        </div>
+                </div>
+
+     
       <div style={{ marginTop: "20px" }}>
         <TableComponent
           columns={columns}
           isLoading={isLoadingOrders}
           data={dataTable}
+          exportExcel={exportCustomExcel}  // Custom export function
+          disableSelection={true} // This will disable the row selection feature
         />
       </div>
+
     </div>
   );
 };

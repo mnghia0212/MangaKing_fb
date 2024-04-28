@@ -40,29 +40,31 @@ const ProductDetailPage = () => {
   return (
     <div style={{ padding: "20px 150px", background: "#efefef" }}>
       <h5>
+            <a href="/" 
+                style={{
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    fontFamily: "Signika Negative",
+                    fontSize: "18px",
+                    marginTop: "10px",
+                    color:'black',
+                    textDecoration:'none'
+
+                  }}
+                  
+            >
+                Home
+            </a>
+         
         <span
           style={{
             cursor: "pointer",
             fontWeight: "bold",
             fontFamily: "Signika Negative",
-            fontSize: "16px",
-            marginTop: "10px",
-          }}
-          onClick={() => {
-            navigate("/");
+            fontSize: "18px",
           }}
         >
-          Home
-        </span>{" "}
-        <span
-          style={{
-            cursor: "pointer",
-            fontWeight: "bold",
-            fontFamily: "Signika Negative",
-            fontSize: "16px",
-          }}
-        >
-          - Comic Details
+         {" "}- Comic Details
         </span>
       </h5>
       <ProductDetailComponent idProduct={id} />

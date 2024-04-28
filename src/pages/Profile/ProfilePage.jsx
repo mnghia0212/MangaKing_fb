@@ -61,32 +61,10 @@ const ProfilePage = () => {
     const handleOnchangeAddress = (value) => {
         setAddress(value)
     }
-    // const handleOnchangeAvatar = async (fileList) => {
-    //     const file = fileList[0]
-    //     if (!file.url && !file.preview) {
-    //         file.preview = await getBase64(file.originFileObj);
-    //     }
-    //     setAvatar(file.preview)
-    // }
-
-    // const handleOnchangeAvatar = async (fileList) => {
-    //     if (fileList.fileList.length > 0) { // Check if fileList is not empty
-    //         const file = fileList.fileList[0];
-    //         if (!file.url && !file.preview) {
-    //             file.preview = await getBase64(file.originFileObj);
-    //         }
-    //         setAvatar(file.preview);
-    //     }
-    // }
-    // const handleFileRead = async (event) => {
-    //     const file = event.target.files[0]
-    //     const base64 = await this.getBase64(file)
-    //     console.log(base64)
-    // }
 
     const handleUpdate = () => {
         mutation.mutate({ id: userdulieu?.id ,email, name, phone, address, access_token: userdulieu?.access_token })
-
+        console.log(userdulieu?.email)
     }
     return (
         <div style={{ width: '1270px', margin: '0 auto', height: '500px'}}>

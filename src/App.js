@@ -70,7 +70,7 @@ function App() {
 
   return (
     <div>
-    <Loading isLoading={isLoading}>
+    {/* <Loading isLoading={isLoading}> */}
         <Router>
           <Routes>
             {routes.map((route) => {
@@ -89,7 +89,7 @@ function App() {
             })}
           </Routes>
         </Router>
-      </Loading>
+      {/* </Loading> */}
     </div>
   )
 }

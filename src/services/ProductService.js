@@ -19,8 +19,9 @@ export const getProductType = async (type, page, limit) => {
 }
 
 export const createProduct = async (data) => {
-    console.log("dcmm", data)
+    console.log("bug", data)
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/product/create`, data)
+    console.log("data", data)
     return res.data
 }
 

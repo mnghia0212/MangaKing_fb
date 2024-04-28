@@ -278,8 +278,7 @@ const AdminUser = () => {
     {
       title: "Phone",
       dataIndex: "phone",
-      sorter: (a, b) => a.phone - b.phone,
-      ...getColumnSearchProps("phone"),
+
     },
     {
       title: "Action",

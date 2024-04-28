@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable jsx-a11y/alt-text */
+import React, { useState } from "react";
 import {
   Lable,
   WrapperInfo,
@@ -8,6 +9,7 @@ import {
   WrapperItemOrder,
   WrapperItemOrderInfo,
   WrapperTotal,
+  Wrapper2Button,
 } from "./style";
 import Loading from "../../components/LoadingComponent/Loading";
 import { useSelector } from "react-redux";
@@ -17,12 +19,14 @@ import { convertPrice } from "../../utils";
 import { Button } from "antd";
 import { LeftOutlined } from "@ant-design/icons";
 
+
+
 const OrderSucess = () => {
+
   const navigate = useNavigate();
 
-  const handleHomeClick = () => {
-    navigate("/");
-  };
+
+
   const location = useLocation();
   console.log("location", location);
   const { state } = location;
@@ -39,10 +43,14 @@ const OrderSucess = () => {
         }}
       >
         <div style={{ padding: "20px" }}>
-          <Button onClick={handleHomeClick}>
-            <LeftOutlined />
-            Back to home
-          </Button>
+          <button style={{width: "fit-content", height: "fit-content", padding:'15px', background: "#fff", border:'none', borderRadius:'10px'}}>
+            <a href="/" style={{textDecoration:'none'}}>
+                <LeftOutlined style={{fontSize:'16px', color:'#000'}}/> 
+                <span style={{fontFamily:'Signika Negative', fontSize:'17px', fontWeight:'bold', color:'#000', marginLeft:'5px'}}>Back to home</span> 
+            </a>
+          </button>
+            
+          
         </div>
         <Loading isLoading={false}>
           <div style={{ height: "100%", width: "1300px", margin: "0 auto" }}>
@@ -63,7 +71,7 @@ const OrderSucess = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 width: "1300px",
-                height: "500px",
+                height: "520px",
                 borderRadius: "10px",
                 boxShadow: "0 0 15px 10px rgba(0, 0, 0, 0.09)",
               }}

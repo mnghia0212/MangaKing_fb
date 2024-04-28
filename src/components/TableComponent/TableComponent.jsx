@@ -5,8 +5,8 @@ import { Excel } from "antd-table-saveas-excel";
 
 
 const TableComponent = (props) => {
-
-    const {selectionType = 'checkbox', data: dataSource = [], isLoading= false, columns=[], handleDeleteMany } = props
+    
+    const { selectionType = 'checkbox', data: dataSource = [], isLoading= false, columns=[], handleDeleteMany, disableSelection } = props
     const [rowSelectedKeys, setRowSelectedKeys] = useState([])
     const newColumnExport = useMemo(() => {
       const arr = columns?.filter((col) => col.dataIndex !== 'action')
@@ -26,16 +26,24 @@ const TableComponent = (props) => {
         //   name: record.name,
         // }),
       };
-      const exportExcel = () => {
-        const excel = new Excel();
-        excel
-          .addSheet("sheet 1")
-          .addColumns(newColumnExport)
-          .addDataSource(dataSource, {
-            str2Percent: true
-          })
-          .saveAs("Excel.xlsx");
+      const { exportExcel: customExportExcel } = props;
+
+        const exportExcel = () => {
+        if (customExportExcel) {
+            customExportExcel();  // Sử dụng hàm tùy chỉnh nếu có
+        } else {
+            // Hàm export mặc định
+            const excel = new Excel();
+            excel
+            .addSheet("sheet 1")
+            .addColumns(newColumnExport)
+            .addDataSource(dataSource, {
+                str2Percent: true
+            })
+            .saveAs("Excel.xlsx");
+        }
         };
+
 
 
   const handleDeleteAll = () => {
@@ -61,17 +69,17 @@ const TableComponent = (props) => {
               }}
               onClick={handleDeleteAll}
               >
-                Delete All
+                Delete
               </div>
             )}
             <button style={{border:'none',background:'#10793F', color:'#fff',borderRadius:'5px',fontWeight: 'bold',  fontFamily:'Signika Negative',  padding: '6px 13px',}} onClick={exportExcel}>Export Excel</button>
           </div>
         
         <Table style={{marginTop:'15px'}}
-            rowSelection={{
-            type: selectionType,
-            ...rowSelection,
-            }}
+             rowSelection={disableSelection ? undefined : {
+                type: selectionType,
+                ...rowSelection,
+              }}
             columns={columns}
             dataSource={dataSource}
             {...props}

@@ -8,6 +8,7 @@ import {
   WrapperButtonMore,
   WrapperProducts,
   WrapperTypeProduct,
+  CategoryWrapper
 } from "./style";
 import SliderComponent from "../../components/SliderComponent/SliderComponent";
 import bn1 from "../../assets/images/bn1.png";
@@ -70,6 +71,10 @@ const HomePage = () => {
   const handleHomeClick = () => {
     navigate("/");
   };
+
+  const handleFilterClick = () => {
+    navigate("/filter");
+  };
   return (
     <Loading isLoading={isLoading || loading}>
       <div
@@ -80,18 +85,29 @@ const HomePage = () => {
           alignItems: "center",
         }}
       >
+
+        {/* under header */}
         <WrapperTypeProduct>
+            {/* home */}
           <TextTypeProduct onClick={handleHomeClick}>Home</TextTypeProduct>
-          <TextTypeProductCategory>
-            Category <CaretDownOutlined style={{ fontSize: "13px" }} />
-          </TextTypeProductCategory>
-          <DropdownContent>
-            {typeProducts.map((item) => {
-              return <TypeProduct name={item} key={item} />;
-            })}
-          </DropdownContent>
+
+             {/* category */}
+             <CategoryWrapper>
+                <TextTypeProductCategory>Category <CaretDownOutlined style={{ fontSize: "13px" }} /></TextTypeProductCategory>
+                <DropdownContent>
+                    {typeProducts.map((item) => {
+                        return <TypeProduct name={item} key={item} />;
+                    })}
+                </DropdownContent>
+            </CategoryWrapper>
+
+
+           {/* filter */}
+           <TextTypeProduct onClick={handleFilterClick}>Filter</TextTypeProduct>
         </WrapperTypeProduct>
       </div>
+
+      {/* slider */}
       <div>
         <SliderComponent arrImages={[bn7, bn3, bn1]} />
       </div>
@@ -124,6 +140,8 @@ const HomePage = () => {
                   selled={product.selled}
                   discount={product.discount}
                   id={product._id}
+                  author={product.author}
+                  publisher={product.publisher}
                 ></CardComponent>
               );
             })}

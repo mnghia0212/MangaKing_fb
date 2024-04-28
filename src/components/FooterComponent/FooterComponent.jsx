@@ -31,7 +31,7 @@ const FooterComponent = () => {
                         <MailOutlined style={{color: '#ff5e14', fontSize: '30px', float: 'left', marginTop: '35px'}}/>
                         <div style={{marginLeft:'40px'}}>
                             <StyleTextH4>Mail us</StyleTextH4>
-                            <StyleTextSpan>ngonghia0212@gmail.com</StyleTextSpan>
+                            <StyleTextSpan>mangaking@gmail.com</StyleTextSpan>
                         </div>
                     </Col>
                 </WrapperRow1Footer>
@@ -45,7 +45,7 @@ const FooterComponent = () => {
 
                             <div>
                                 <StyleTextCommit>
-                                    Trust us when choosing this is where you buy comics, we commit to bring you the best quality comics !
+                                    Trust us when choosing this is where you buy comics, we commit to bring you the greatest comics !
                                 </StyleTextCommit>
                             </div>
 

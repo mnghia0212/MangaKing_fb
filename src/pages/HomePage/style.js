@@ -7,7 +7,6 @@ export const WrapperTypeProduct = styled.div`
     gap: 70px;
     justify-content: flex-start;
     height: 50px;
-    cursor: pointer;
     position: relative;
 `
 
@@ -18,34 +17,38 @@ export const TextTypeProduct = styled.div
     padding: 0px 10px;
     cursor: pointer;
 `
+export const DropdownContent = styled.div`
+    display: none;  /* Ẩn dropdown mặc định */
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.4);
+    padding: 10px 10px;
+    border-radius: 15px;
+    left: -120px; /* Đặt dropdown ngay dưới Category */
+    top: 100%; /* Đặt dropdown ngay dưới Category */
+    width: 350px;
+    z-index: 1;
+    grid-template-columns: repeat(2, 1fr); /* Chia thành 2 cột */
+    gap: 20px;
+`;
 
-export const TextTypeProductCategory = styled.div
-`
+export const TextTypeProductCategory = styled.div`
     font-size: 20px;
     font-family: 'Pixelify Sans';
     padding: 0px 10px;
     cursor: pointer;
     display: inline-block;
-`
+`;
 
-export const DropdownContent = styled.div`
-    display: none; /* Ẩn dropdown mặc định */   
-    position: absolute;
-    background-color: #f9f9f9;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    padding: 10px 10px;
-    left: 40px; /* Điều chỉnh dropdown hiển thị ở vị trí khác */;
-    top: 50px;
-    width: 350px;
-    z-index: 1;
-    grid-template-columns: repeat(2, 1fr); /* Chia thành 2 cột */;
-    gap: 20px;
-  
+// Thêm quy tắc hover vào CategoryWrapper thay vì TextTypeProductCategory
+export const CategoryWrapper = styled.div`
+    display: inline-block; /* Cho phép bao bọc chính xác các thành phần bên trong */
+    position: relative; /* Cho phép DropdownContent được vị trí tương đối */
 
-    ${WrapperTypeProduct}:hover & {
-        display: grid;
+    &:hover ${DropdownContent} {
+        display: grid; /* Hiện dropdown khi hover vào CategoryWrapper */
     }
-`
+`;
 
 export const TextRecommend = styled.p`
     font-family: 'Pixelify Sans', sans-serif; 

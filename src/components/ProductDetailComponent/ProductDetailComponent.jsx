@@ -144,9 +144,12 @@ const ProductDetailComponent = ({ idProduct }) => {
               discount: productDetails?.discount,
               countInStock: productDetails?.countInStock,
               description: productDetails?.description,
+              author: productDetails?.author,
+              publisher: productDetails?.publisher
             },
           })
         );
+        message.success("Successfully add to cart !")
       } else {
         setErrorLimitOrder(true);
       }
@@ -187,6 +190,8 @@ const ProductDetailComponent = ({ idProduct }) => {
               discount: productDetails?.discount,
               countInStock: productDetails?.countInStock,
               description: productDetails?.description,
+              author: productDetails?.author,
+              publisher: productDetails?.publisher
             },
           })
         );
@@ -234,7 +239,7 @@ const ProductDetailComponent = ({ idProduct }) => {
             />
             <WrapperStyleTextSell style={{ marginLeft: "5px" }}>
               {" "}
-              | {numProduct}+
+              | {productDetails?.selled - 1}+ sold
             </WrapperStyleTextSell>
           </div>
 
@@ -243,17 +248,21 @@ const ProductDetailComponent = ({ idProduct }) => {
                         <s>220,000 VND</s>
                     </StyleSalePriceProduct> */}
 
-            <StylePriceProduct>
-              {convertPrice(productDetails?.price)}
-            </StylePriceProduct>
+                <s>
+                    <StylePriceProduct style={{marginTop: "7px"}}>
+                    {convertPrice(productDetails?.price)}
+                    </StylePriceProduct>
+                </s>
 
-            <div
-              style={{ height: "50px", display: "flex ", alignItems: "center" }}
-            >
-              <StyleSalePercentProduct>
+                <StylePriceProduct>
+                    {convertPrice(productDetails?.price - ((productDetails?.price * productDetails?.discount / 100)))}
+                </StylePriceProduct>
+
+        
+              <StyleSalePercentProduct style={{marginTop: "12px"}}>
                 -{productDetails?.discount}%
               </StyleSalePercentProduct>
-            </div>
+         
           </WrapperPriceProduct>
 
           <LikeButtonComponent dataHref={window.location.href} />
@@ -410,6 +419,24 @@ const ProductDetailComponent = ({ idProduct }) => {
                 <WrapperDeppRow>
                   <StyleSpan1>Number of pages</StyleSpan1>
                   <StyleSpan2>208</StyleSpan2>
+                </WrapperDeppRow>
+              </WrapperRow>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <WrapperRow>
+                <WrapperDeppRow>
+                  <StyleSpan1>Author</StyleSpan1>
+                  <StyleSpan2>{productDetails?.author}</StyleSpan2>
+                </WrapperDeppRow>
+              </WrapperRow>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <WrapperRow>
+                <WrapperDeppRow>
+                  <StyleSpan1>Publisher</StyleSpan1>
+                  <StyleSpan2>{productDetails?.publisher}</StyleSpan2>
                 </WrapperDeppRow>
               </WrapperRow>
             </div>

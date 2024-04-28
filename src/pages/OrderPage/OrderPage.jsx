@@ -121,25 +121,20 @@ const OrderPage = () => {
   };
 
   const priceMemo = useMemo(() => {
-    const result = order?.orderItemsSlected?.reduce((total, cur) => {
+    return order?.orderItemsSlected?.reduce((total, cur) => {
       return total + cur.price * cur.amount;
     }, 0);
-    return result;
-  }, [order]);
-
+  }, [order.orderItemsSlected]);
+  
   const priceDiscountMemo = useMemo(() => {
-    const result = order?.orderItemsSlected?.reduce((total, cur) => {
-      const totalDiscount = cur.discount ? cur.discount : 0;
-      return total + (priceMemo * (totalDiscount * cur.amount)) / 100;
+    return order?.orderItemsSlected?.reduce((total, cur) => {
+      const discountAmount = cur.discount ? (cur.price * cur.amount * cur.discount) / 100 : 0;
+      return total + discountAmount;
     }, 0);
-    if (Number(result)) {
-      return result;
-    }
-    return 0;
-  }, [order]);
+  }, [order.orderItemsSlected, priceMemo])
 
   const diliveryPriceMemo = useMemo(() => {
-    if (priceMemo >= 20000 && priceMemo < 500000) {
+    if (priceMemo >= 200000 && priceMemo < 500000) {
       return 10000;
     } else if (priceMemo >= 500000 || order?.orderItemsSlected?.length === 0) {
       return 0;
@@ -149,9 +144,7 @@ const OrderPage = () => {
   }, [priceMemo]);
 
   const totalPriceMemo = useMemo(() => {
-    return (
-      Number(priceMemo) - Number(priceDiscountMemo) + Number(diliveryPriceMemo)
-    );
+    return priceMemo - priceDiscountMemo + diliveryPriceMemo;
   }, [priceMemo, priceDiscountMemo, diliveryPriceMemo]);
 
   const handleRemoveAllOrder = () => {
@@ -168,10 +161,12 @@ const OrderPage = () => {
     } else {
       navigate("/payment");
     }
+    console.log("usẻrrrrr", user);
   };
 
   const mutationUpdate = useMutationHooks((data) => {
     const { id, token, ...rests } = data;
+    console.log("con cac", data)
     const res = UserService.updateUser(id, { ...rests }, token);
     return res;
   });
@@ -191,12 +186,13 @@ const OrderPage = () => {
 
   const handleUpdateInforUser = () => {
     const { name, address, city, phone } = stateUserDetails;
+    const currentEmail = user.email;
     if (name && address && city && phone) {
       mutationUpdate.mutate(
-        { ...stateUserDetails, id: user?.id, token: user?.access_token },
+        { ...stateUserDetails,  email: currentEmail, id: user?.id, token: user?.access_token },
         {
           onSuccess: () => {
-            console.log(user);
+            console.log("dcmm", user);
             dispatch(
               updateUser({
                 access_token: user.access_token,
@@ -204,6 +200,7 @@ const OrderPage = () => {
                 address,
                 city,
                 phone,
+                email: currentEmail,
                 _id: user.id,
               })
             );
@@ -252,12 +249,22 @@ const OrderPage = () => {
       }}
     >
       <div
-        style={{ width: "100%", alignItems: "flex-start", marginLeft: "70px" }}
+        style={{ width: "100%", alignItems: "flex-start", marginLeft: "90px" }}
       >
-        <Button onClick={handleHomeClick}>
-          <LeftOutlined />
-          Back to home
-        </Button>
+       <button 
+            style={{width: "fit-content", 
+                    height: "fit-content", 
+                    padding:'15px', 
+                    background: "#fff", 
+                    border:'none', 
+                    borderRadius:'10px',
+                    boxShadow: "0 0 15px 10px rgba(0, 0, 0, 0.09)",
+                }}>
+            <a href="/" style={{textDecoration:'none'}}>
+                <LeftOutlined style={{fontSize:'16px', color:'#000'}}/> 
+                <span style={{fontFamily:'Signika Negative', fontSize:'17px', fontWeight:'bold', color:'#000', marginLeft:'5px'}}>Back to home</span> 
+            </a>
+        </button>
       </div>
       <div
         style={{

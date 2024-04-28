@@ -1,0 +1,7 @@
+Những thứ cần làm :
+
+- Sửa lại filter và arrange ở Stock Admin
+
+- Clean filter và arrange ở Admin Pages
+
+- Check paypal

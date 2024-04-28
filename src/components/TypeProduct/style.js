@@ -9,7 +9,7 @@ export const TypeProductItem = styled.div
     text-align: center;
 
     &:hover {
-        background-color: #E2E2E2;
+        background-color: #FFE990;
         border-radius: 10px;
     }
 `

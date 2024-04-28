@@ -34,7 +34,7 @@ const PaymentPage = () => {
   const product = useSelector((state) => state.product);
 
   const [delivery, setDelivery] = useState("fast");
-  const [payment, setPayment] = useState("later_money");
+  const [payment, setPayment] = useState("COD");
   const navigate = useNavigate();
   const [sdkReady, setSdkReady] = useState(false);
 
@@ -48,6 +48,10 @@ const PaymentPage = () => {
   const [form] = Form.useForm();
 
   const dispatch = useDispatch();
+
+  const handleOrderConfirm = () => {
+    navigate("/order-confirm");
+  }
 
   useEffect(() => {
     form.setFieldsValue(stateUserDetails);
@@ -69,37 +73,31 @@ const PaymentPage = () => {
   };
 
   const priceMemo = useMemo(() => {
-    const result = order?.orderItemsSlected?.reduce((total, cur) => {
+    return order?.orderItemsSlected?.reduce((total, cur) => {
       return total + cur.price * cur.amount;
     }, 0);
-    return result;
-  }, [order]);
-
+  }, [order.orderItemsSlected]);
+  
   const priceDiscountMemo = useMemo(() => {
-    const result = order?.orderItemsSlected?.reduce((total, cur) => {
-      const totalDiscount = cur.discount ? cur.discount : 0;
-      return total + (priceMemo * (totalDiscount * cur.amount)) / 100;
+    return order?.orderItemsSlected?.reduce((total, cur) => {
+      const discountAmount = cur.discount ? (cur.price * cur.amount * cur.discount) / 100 : 0;
+      return total + discountAmount;
     }, 0);
-    if (Number(result)) {
-      return result;
-    }
-    return 0;
-  }, [order]);
+  }, [order.orderItemsSlected, priceMemo])
 
+  console.log("price", priceMemo);
   const diliveryPriceMemo = useMemo(() => {
-    if (priceMemo > 200000) {
-      return 10000;
-    } else if (priceMemo === 0) {
+    if (priceMemo >= 500000) {
       return 0;
+    } else if (priceMemo >= 200000 && priceMemo < 500000) {
+      return 10000;
     } else {
       return 20000;
     }
   }, [priceMemo]);
 
   const totalPriceMemo = useMemo(() => {
-    return (
-      Number(priceMemo) - Number(priceDiscountMemo) + Number(diliveryPriceMemo)
-    );
+    return priceMemo - priceDiscountMemo + diliveryPriceMemo;
   }, [priceMemo, priceDiscountMemo, diliveryPriceMemo]);
 
   const handleAddOrder = () => {
@@ -113,7 +111,8 @@ const PaymentPage = () => {
       priceMemo &&
       user?.id
     ) {
-      console.debug("Hello world");
+     
+      
       // eslint-disable-next-line no-unused-expressions
       mutationAddOrder.mutate({
         token: user?.access_token,
@@ -128,7 +127,8 @@ const PaymentPage = () => {
         totalPrice: totalPriceMemo,
         user: user?.id,
         email: user?.email,
-      });
+      })
+
     }
   };
 
@@ -140,7 +140,9 @@ const PaymentPage = () => {
 
   const mutationAddOrder = useMutationHooks((data) => {
     const { token, ...rests } = data;
+    console.log("bug lỏ", data);
     const res = OrderService.createOrder({ ...rests }, token);
+    console.log("bug lỏ 2", data);
     return res;
   });
 
@@ -329,7 +331,7 @@ const PaymentPage = () => {
                     style={{ marginTop: "15px" }}
                   >
                     <Radio
-                      value="later_money"
+                      value="COD"
                       style={{ fontFamily: "Signika Negative" }}
                     >
                       {" "}
@@ -474,7 +476,7 @@ const PaymentPage = () => {
           </div>
         </div>
         <ModalComponent
-          title="Cập nhật thông tin giao hàng"
+          title="Update shipping information"
           open={isOpenModalUpdateInfo}
           onCancel={handleCancleUpdate}
           onOk={handleUpdateInforUser}

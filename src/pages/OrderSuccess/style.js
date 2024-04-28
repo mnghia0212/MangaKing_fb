@@ -21,8 +21,6 @@ export const WrapperContainer = styled.div`
 export const WrapperItemOrder = styled.div`
   margin-top: 12px;
 
-
-
 `
 
 
@@ -47,14 +45,21 @@ export const WrapperItemOrderInfo = styled.div`
 `
 
 export const WrapperTotal = styled.div`
-padding: 20px 0px;  
-
-  display: flex;
-   align-items: flex-start; 
-   justify-content: space-between;
-
+    padding: 20px 0px;  
+    display: flex;
+    align-items: flex-start; 
+    justify-content: space-between;
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 6px;
+`
+
+export const Wrapper2Button = styled.div
+`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 50px;
+ 
 `
 
 export const Lable = styled.span`
